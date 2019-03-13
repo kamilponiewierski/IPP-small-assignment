@@ -7,38 +7,27 @@ struct QuantumNode_s;
 
 typedef struct QuantumNode_s *Tree;
 
-struct QuantumNode_s {
+struct QuantumNode_s
+{
     int id;
     Tree child_0, child_1, child_2, child_3;
-
-
 } QuantumNode_default = {3, NULL, NULL, NULL, NULL};
 
 typedef struct QuantumNode_s QuantumNode;
 
-#define N_ELEMS(x)  (sizeof(x) / sizeof((x)[0]))
-
-#define typename(x) _Generic((x),                                                 \
-        _Bool: "_Bool",                  unsigned char: "unsigned char",          \
-         char: "char",                     signed char: "signed char",            \
-    short int: "short int",         unsigned short int: "unsigned short int",     \
-          int: "int",                     unsigned int: "unsigned int",           \
-     long int: "long int",           unsigned long int: "unsigned long int",      \
-long long int: "long long int", unsigned long long int: "unsigned long long int", \
-        float: "float",                         double: "double",                 \
-  long double: "long double",                   char *: "pointer to char",        \
-       void *: "pointer to void",                int *: "pointer to int",         \
-      default: "other")
-
 
 int isdigit(int);
 
-void get_command(const char *begin, char *buf) {
+void get_command(const char *begin, char *buf)
+{
     int i = 0;
-    while (*(begin + i) != '\0' && *(begin + i) != '\n' && 'A' <= *(begin + i) && *(begin + i) <= 'Z') {
-
+    while (*(begin + i) != '\0' && *(begin + i) != '\n' &&
+    (('A' <= *(begin + i) && *(begin + i) <= 'Z') || *(begin + i) == ' ' ))
+    {
+        buf[i] = *(begin + i);
         i++;
     }
+    buf[i] = '\0';
 }
 
 void get_parameter(const char *begin, char *buf) {
@@ -59,6 +48,25 @@ void get_parameter(const char *begin, char *buf) {
     }
 }
 
+int match_parameter(char *arg)
+{
+
+    if(arg == NULL)
+        return -1;
+    else if(strcmp(arg, "DECLARE \0") == 0)
+        return 1;
+    else if(strcmp(arg, "REMOVE \0") == 0)
+        return 2;
+    else if(strcmp(arg, "VALID \0") == 0)
+        return 3;
+    else if(strcmp(arg, "ENERGY \0") == 0)
+        return 4;
+    else if(strcmp(arg, "EQUAL \0") == 0)
+        return 5;
+    else
+        return 0;
+}
+
 //void cmd_VALID ()
 
 //TODO da się scalić?
@@ -72,75 +80,47 @@ void get_parameter(const char *begin, char *buf) {
 //void cmd EQUAL
 
 
-int main() {
+int main()
+{
     char line[1024];
-    typename(line);
     char *str = line;
 
 
-    while (fgets(line, 1024, stdin)) {
-        QuantumNode history = QuantumNode_default;
+    while (fgets(line, 1024, stdin))
+    {
+        //QuantumNode history = QuantumNode_default;
+
         if (str[0] == '\n' || str[0] == ' ' || str[0] == '#')
             continue;
 
+        //TODO dynamic array
+        char cmd[10];
+
+        char *buf = cmd;
         char *ptr_at_arg = &line[0];
         assert(ptr_at_arg != NULL);
-//      TODO poprawka ustawiania wskaźnika
-        while (*ptr_at_arg != '\n' && *ptr_at_arg != ' ') {
-            printf("%c", *ptr_at_arg);
-//            printf("address of ptr_at_arg in decimal is %lld\n", (long long) (__intptr_t) (&ptr_at_arg));
-            ptr_at_arg++;
+
+        get_command(ptr_at_arg, buf);
+
+        puts(buf);
+
+        switch (match_parameter(buf))
+        {
+            case 1:
+//                cmd_DECLARE();
+                printf("FOUND DECLARE COMMAND\n");
+                break;
+            case 2:
+//                cmd_REMOVE();
+                printf("FOUND REMOVE COMMAND\n");
+
+                break;
+//            TODO all functions
         }
 
 
-        char *buf = (char *) malloc(32 * sizeof(char));
 
-        //TODO dynamiczna tablica
-        char tab[100];
-
-        buf = tab;
-        assert(buf != NULL);
-
-        get_parameter(ptr_at_arg, buf);
-
-        for (int i = 0; buf[i] != '\0'; i++) {
-            printf("%c", buf[i]);
-        }
-
-//        free(buf);
-//        free(ptr_at_arg);
-
-//        blok sprawdzenia polecenia
-//        char check_valid[7];
-//        memcpy(&check_valid, &line[0], 6 * sizeof(char));
-//        check_valid[6] = '\0';
-//        puts(check_valid);
-//
-//        if(strcmp(check_valid, "VALID \0") == 0)
-//        {
-//            printf("POLECENIE VALID\n");
-
-
-//      passing argument when input starts with "VALID "
-
-
-
-
-
-
-
-//
-//
-//        for (int i = 0; i < 6; i++)
-//        {
-//            printf("%d\n", i);
-//            printf("%c", check_valid[i]);
-//        }
-//        printf("\n");
-//
-//        printf("testOK\n");
-
-
+        printf("\n");
     }
 
 
