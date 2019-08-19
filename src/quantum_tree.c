@@ -11,7 +11,7 @@ void init_node(node *n)
 {
     n->energy = 0;
     n->valid = 0;
-    n->prev = n;
+//    n->prev = n;
     n->next = n;
 
     for (int i = 0; i < CHILDREN_COUNT; i++)
@@ -67,7 +67,7 @@ bool can_be_deleted(node *n)
 
     bool subnodes_exist = has_children(n);
 
-    if (n->energy == 0 && n->prev == n && n->next == n && n->valid == 0 && subnodes_exist == false)
+    if (n->energy == 0 && /*n->prev  == n  && */ n->next == n && n->valid == 0 && subnodes_exist == false)
     {
         return true;
     } else

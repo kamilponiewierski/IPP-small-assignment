@@ -51,32 +51,17 @@ void declare(char *history, node *root_node)
 
 bool is_valid(char *history, node *root_node)
 {
-    if (root_node != NULL && *history != '\0')
+    node **tmp = get_node_under_history(history, root_node);
+
+    if (tmp == NULL)
+        return false;
+        // TODO maybe would be better to not care about tree root and just return ->valid ?
+    else if ((*tmp)->valid == 1)
     {
-        assert_inside_history(*history);
-
-        int index = *history - '0';
-
-        if (root_node->children[index] == NULL)
-        {
-            return false;
-        } else
-        {
-            if (*(history + 1) == '\0')
-            {
-                // TODO maybe would be better to not care about tree root and just return ->valid ?
-                if (root_node->children[index]->valid == 1)
-                {
-                    return true;
-                } else
-                {
-                    return false;
-                }
-            } else
-            {
-                return is_valid((history + 1), root_node->children[index]);
-            }
-        }
+        return true;
+    } else
+    {
+        return false;
     }
 }
 
@@ -93,6 +78,7 @@ void valid(char *history, node *root_node)
         }
     } else
     {
+        //TODO errors put out outside the function
         fputs(ERROR_STRING, stdout);
     }
 
@@ -131,9 +117,12 @@ void energy_two_param(char *history, uint64_t energy, node *root_node)
 void energy_one_param(char *history, node *root_node)
 {
     node **tmp = get_node_under_history(history, root_node);
-    if ((*tmp)->valid == 1)
+    if (tmp != NULL && (*tmp)->valid == 1)
     {
         printf("%" PRId64 "\n", (*tmp)->energy);
+    } else
+    {
+        printf(ERROR_STRING);
     }
 }
 
@@ -178,7 +167,17 @@ node **get_node_under_history(char *history, node *root_node)
 
     for (; *history != '\0'; history++)
     {
+        if (*history < '0' || '3' < *history)
+        {
+            return NULL;
+        }
+
         index = char_digit_to_int(*history);
+
+        // if we have to go through null node, we can't get a valid node after that
+        if ((*result)->children[index] == NULL)
+            return NULL;
+
         result = &(*result)->children[index];
     }
 

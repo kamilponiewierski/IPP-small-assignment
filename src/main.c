@@ -186,6 +186,7 @@ void DECLARE(node *n, char *c)
     free(ptr);
 }*/
 
+/*
 void add_single_node_to_abs_class(node *abs_class, node *n, uint64_t energy)
 {
     if (n->valid != 1)
@@ -207,8 +208,9 @@ void add_single_node_to_abs_class(node *abs_class, node *n, uint64_t energy)
     abs_class->prev->next = n;
     abs_class->prev = n;
 
-}
+} */
 
+/*
 void EQUAL(node *a, node *b)
 {
     if (a->energy != 0 && b->energy == 0 && a->valid == 1 && b->valid == 1)
@@ -242,7 +244,7 @@ void EQUAL(node *a, node *b)
     {
 
     }
-}
+} */
 
 
 
@@ -275,8 +277,10 @@ int main()
     energy_two_param("0012\0", 12312343, tree_root);
     energy_one_param(buf1, tree_root);
 
-    node **ptr = get_node_under_history("00\0", tree_root);
-    dbg_print_node(*ptr);
+    node **ptr = get_node_under_history("0012\0", tree_root);
+
+    if (ptr != NULL)
+        dbg_print_node(*ptr);
 
     clear_tree(&tree_root);
 

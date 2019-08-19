@@ -22,7 +22,7 @@ typedef struct node
 {
     uint64_t energy;
     short valid;
-    struct node *prev;
+//    struct node *prev;
     struct node *next;
     struct node *children[CHILDREN_COUNT];
 } node;
