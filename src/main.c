@@ -1,14 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <inttypes.h>
-
 #include "quantum_tree.h"
-
-#define CHILDREN_COUNT 4
-#define MAXIMUM_VALID_ENERGY_DIGITS 20
-
+#include "quantum_functions.h"
 
 int isdigit(int);
 
@@ -256,37 +247,45 @@ void EQUAL(node *a, node *b)
 }
 
 
+
 int main()
 {
-    node *node_test = get_node();
-    if (node_test == NULL)
+    node *tree_root = create_root();
+    if (tree_root == NULL)
     {
         return EXIT_FAILURE;
     }
 
-    printf("%d\n", can_be_deleted(node_test));
+    char *buf1 = (char *) malloc(5 * sizeof(char));
+    buf1 = "0012\0";
+    char *buf2 = (char *) malloc(7 * sizeof(char));
+    buf2 = "012311\0";
+    char *buf3 = (char *) malloc(10 * sizeof(char));
+    buf3 = "1231210\0";
 
-    assert(node_test->energy == 0);
+    char *test_null_string = (char *) malloc(4 * sizeof(char));
+    test_null_string = "\0";
 
-    add_child(node_test, 0);
-    add_child(node_test, 0);
-    add_child(node_test->children[0], 1);
+    char *test_percentage = (char *) malloc(10 * sizeof(char));
+    test_percentage = "\\ %d\0";
 
-    dbg_print_node(node_test);
+    assert(check_input_history("01123211232\0") == true);
+    assert(check_input_history("%d121aadds\0") == false);
+    assert(check_input_history("unsigned long\0") == false);
+    assert(check_input_history("0\0") == true);
 
-    printf("%d\n", can_be_deleted(node_test));
-    printf("%d\n", can_be_deleted(node_test->children[0]));
-    printf("%d\n", can_be_deleted(node_test->children[0]->children[1]));
 
-    delete_children(node_test);
-    dbg_print_node(node_test);
+    declare(test_null_string, tree_root);
+    declare(test_percentage, tree_root);
 
-    free(node_test);
+    int test = strcmp("ENERGY", "ENERGY
 
-    //TODO dynamic input array
-    //TODO REMOVE
-    //TODO MEMORY FREEING
-    //TODO EQUAL
+
+    declare(buf1, tree_root);
+    valid(buf1, tree_root);
+    energy_two_param(buf1, 12312343, tree_root);
+    energy_one_param(buf1, tree_root);
+
 
     return 0;
 }
