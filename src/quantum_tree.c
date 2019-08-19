@@ -26,34 +26,12 @@ node *get_node()
     ptr = (node *) malloc(sizeof(node));
     if (!ptr)
     {
-        // Allocation of memory failed, program will exit
+        // Allocation of memory failed
         perror("malloc");
         return NULL;
     }
     init_node(ptr);
     return ptr;
-}
-
-void dbg_print_node(node *n)
-{
-    if (n == NULL)
-    {
-        printf(NULL_NODE_ERROR);
-        return;
-    }
-
-    printf("Energy = %" PRId64 "\n", n->energy);
-    fputs("Valid = ", stdout);
-    fputs(n->valid ? "true\n" : "false\n", stdout);
-    printf("Nulls: ");
-    for (int i = 0; i < CHILDREN_COUNT; i++)
-    {
-        if (n->children[i] == NULL)
-        {
-            printf("%d, ", i);
-        }
-    }
-    printf("\n");
 }
 
 void add_child(node *n, int child_index)
@@ -102,15 +80,9 @@ void delete_given_child(node *n, int child_index)
 {
     if (child_index < CHILDREN_COUNT && n->children[child_index] != NULL)
     {
-        if (can_be_deleted(n->children[child_index]))
-        {
-            free(n->children[child_index]);
-            n->children[child_index] = NULL;
-        } else
-        {
-            delete_children(n->children[child_index]);
-            delete_given_child(n, child_index);
-        }
+        delete_children(n->children[child_index]);
+        free(n->children[child_index]);
+        n->children[child_index] = NULL;
     }
 }
 
@@ -122,7 +94,31 @@ void delete_children(node *n)
     }
 }
 
-void dbg_print_node_address(node *ptr)
+void clear_tree(node **tree_root)
 {
-    printf("%p\n", &ptr);
+    delete_children(*tree_root);
+    free(*tree_root);
+    *tree_root = NULL;
+}
+
+void dbg_print_node(node *n)
+{
+    if (n == NULL)
+    {
+        printf(NULL_NODE_ERROR);
+        return;
+    }
+
+    printf("Energy = %" PRId64 "\n", n->energy);
+    fputs("Valid = ", stdout);
+    fputs(n->valid ? "true\n" : "false\n", stdout);
+    printf("Nulls: ");
+    for (int i = 0; i < CHILDREN_COUNT; i++)
+    {
+        if (n->children[i] == NULL)
+        {
+            printf("%d, ", i);
+        }
+    }
+    printf("\n");
 }

@@ -130,19 +130,57 @@ void energy_two_param(char *history, uint64_t energy, node *root_node)
 
 void energy_one_param(char *history, node *root_node)
 {
-    if (root_node != NULL && *history != '\0')
+    node **tmp = get_node_under_history(history, root_node);
+    if ((*tmp)->valid == 1)
     {
-        assert_inside_history(*history);
-        int index = *history - '0';
-        if (root_node->children[index] != NULL)
+        printf("%" PRId64 "\n", (*tmp)->energy);
+    }
+}
+
+int remove_quantum_helper(char *history, node *node_t)
+{
+    if (node_t != NULL && *history != '\0')
+    {
+        int index = char_digit_to_int(*history);
+        if (node_t->children[index] != NULL)
         {
-            energy_one_param((history + 1), root_node->children[index]);
+            remove_quantum_helper((history + 1), node_t->children[index]);
         }
-    } else if (root_node != NULL && *history == '\0')
-    {
-        if (root_node->valid == 1)
+
+        if (*(history + 2) == '\0')
         {
-            printf("%" PRId64 "\n", root_node->energy);
+            index = char_digit_to_int(*(history + 1));
+            delete_children(node_t->children[index]);
+            free(node_t->children[index]);
+            node_t->children[index] = NULL;
+            return 0;
         }
     }
+}
+
+void remove_quantum(char *history, node *root_node)
+{
+    if (check_input_history(history))
+    {
+        int result = remove_quantum_helper(history, root_node);
+        if (result)
+        {
+
+        }
+    }
+
+}
+
+node **get_node_under_history(char *history, node *root_node)
+{
+    node **result = &root_node;
+    int index = -1;
+
+    for (; *history != '\0'; history++)
+    {
+        index = char_digit_to_int(*history);
+        result = &(*result)->children[index];
+    }
+
+    return result;
 }

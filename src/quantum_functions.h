@@ -21,7 +21,7 @@ bool check_input_history(char *string);
 void declare(char *history, node *root_node);
 
 /// Every quantum history which has a prefix given in parameter becomes invalid
-void remove_quantum(char *history);
+void remove_quantum(char *history, node *root_node);
 
 /// Checks if given history is valid, helper for valid function
 bool is_valid(char *history, node *root_node);
@@ -40,5 +40,8 @@ void energy_one_param(char *history, node *root_node);
 /// If both nodes have assigned energy the new energy is equal to arithmetic average, rounded down
 /// If nodes already belong to the same abs class, nothing is changed.
 void equal(char *history_a, char *history_b);
+
+/// Iterates through tree and returns pointer to a node under given history
+node **get_node_under_history(char *history, node *root_node);
 
 #endif //IPP_MALE_QUANTUM_FUNCTIONS_H

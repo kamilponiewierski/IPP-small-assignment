@@ -1,8 +1,6 @@
 #include "quantum_tree.h"
 #include "quantum_functions.h"
 
-int isdigit(int);
-
 int valid_string(const char *c)
 {
     int i = 0;
@@ -256,36 +254,38 @@ int main()
         return EXIT_FAILURE;
     }
 
-    char *buf1 = (char *) malloc(5 * sizeof(char));
-    buf1 = "0012\0";
-    char *buf2 = (char *) malloc(7 * sizeof(char));
-    buf2 = "012311\0";
-    char *buf3 = (char *) malloc(10 * sizeof(char));
-    buf3 = "1231210\0";
+    char *buf1 = strdup("0012\0");
+    char *buf2 = strdup("012311\0");
+    char *buf3 = strdup("1231210\0");
 
-    char *test_null_string = (char *) malloc(4 * sizeof(char));
-    test_null_string = "\0";
-
-    char *test_percentage = (char *) malloc(10 * sizeof(char));
-    test_percentage = "\\ %d\0";
+    char *test_null_string = strdup("\0");
+    char *test_percentage = strdup("\\ %d\0");
 
     assert(check_input_history("01123211232\0") == true);
     assert(check_input_history("%d121aadds\0") == false);
     assert(check_input_history("unsigned long\0") == false);
     assert(check_input_history("0\0") == true);
 
-
     declare(test_null_string, tree_root);
     declare(test_percentage, tree_root);
-
-    int test = strcmp("ENERGY", "ENERGY
 
 
     declare(buf1, tree_root);
     valid(buf1, tree_root);
-    energy_two_param(buf1, 12312343, tree_root);
+    energy_two_param("0012\0", 12312343, tree_root);
     energy_one_param(buf1, tree_root);
 
+    node **ptr = get_node_under_history("00\0", tree_root);
+    dbg_print_node(*ptr);
+
+    clear_tree(&tree_root);
+
+    free(buf1);
+    free(buf2);
+    free(buf3);
+
+    free(test_null_string);
+    free(test_percentage);
 
     return 0;
 }

@@ -36,6 +36,7 @@ static void init_node(node *n);
 /// Create a new node with default values, returns null if malloc failed
 node *get_node();
 
+
 /// Adds a child to node under given index, nothing happens if the pointer is not NULL
 /// @param n node
 /// @param child_index index of table under which a new node is created
@@ -55,6 +56,10 @@ void delete_children(node *n);
 /// @param n node which should have its child deleted
 /// @param child_index index where deletion will happen
 void delete_given_child(node *n, int child_index);
+
+
+/// Clears whole tree and frees memory
+void clear_tree(node **tree_root);
 
 /// Prints all the values in the node @param ptr, along with empty children
 void dbg_print_node(node *ptr);
