@@ -1,20 +1,16 @@
-//
-// Created by kamil on 24.07.19.
-//
-
 #include "quantum_tree.h"
 
-
-void init_tree(node *n)
+node *create_root()
 {
-    init_node(n);
+    node *n = get_node();
     n->valid = -1;
+    return n;
 }
 
 void init_node(node *n)
 {
     n->energy = 0;
-    n->valid = false;
+    n->valid = 0;
     n->prev = n;
     n->next = n;
 
@@ -68,6 +64,11 @@ void add_child(node *n, int child_index)
 
 bool has_children(node *n)
 {
+    if (n == NULL)
+    {
+        return false;
+    }
+
     int count_null_nodes = 0;
     for (int i = 0; i < CHILDREN_COUNT; i++)
     {
@@ -83,9 +84,12 @@ bool has_children(node *n)
 
 bool can_be_deleted(node *n)
 {
+    if (n == NULL)
+        return true;
+
     bool subnodes_exist = has_children(n);
 
-    if (n->energy == 0 && n->prev == n && n->next == n && n->valid == false && subnodes_exist == false)
+    if (n->energy == 0 && n->prev == n && n->next == n && n->valid == 0 && subnodes_exist == false)
     {
         return true;
     } else
