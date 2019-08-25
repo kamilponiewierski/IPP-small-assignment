@@ -128,8 +128,8 @@ int main()
 //    assert(check_input_history("unsigned long\0") == false);
 //    assert(check_input_history("0\0") == true);
 //
-//    declare(test_null_string, tree_root);
-//    declare(test_percentage, tree_root);
+//    declare(test_null_string);
+//    declare(test_percentage);
 //
 //
 //    declare(buf1, tree_root);
@@ -143,52 +143,43 @@ int main()
 //        dbg_print_node(*ptr);
 
 
-    new_declare("0123\0");
-    new_valid("0\0");
-    new_valid("01\0");
 
+    declare("0123\0");
+    valid("0\0");
+    valid("01\0");
+    valid("012\0");
+    valid("0123\0");
+    valid("1\0");
+    valid("01232\0");
 
-//    declare("0123\0", tree_root);
-//    valid("0\0", tree_root);
-//    valid("01\0", tree_root);
-//    valid("012\0", tree_root);
-//    valid("0123\0", tree_root);
-//    valid("1\0", tree_root);
-//    valid("01232\0", tree_root);
-//
-//    declare("0123210\0", tree_root);
-//    valid("0123\0", tree_root);
-//    valid("01232\0", tree_root);
-//    valid("012321\0", tree_root);
-//    valid("0123210\0", tree_root);
-//    valid("01232101\0", tree_root);
-//
-//    declare("01\0", tree_root);
-//    valid("0\0", tree_root);
-//    valid("01\0", tree_root);
-//    valid("012\0", tree_root);
-//    valid("0123210\0", tree_root);
-//    valid("01232101\0", tree_root);
-//
-//    remove_quantum("012321\0", tree_root);
-//    valid("0\0", tree_root);
-//    valid("01\0", tree_root);
-//    valid("012\0", tree_root);
-//    valid("0123\0", tree_root);
-//    valid("01232\0", tree_root);
-//    valid("012321\0", tree_root);
-//    valid("0123210\0", tree_root);
-//    valid("01232101\0", tree_root);
-//
-//    remove_quantum("01232101232\0", tree_root);
-//    valid("0\0", tree_root);
-//    valid("01232\0", tree_root);
-//    valid("012321\0", tree_root);
+    declare("0123210\0");
+    valid("0123\0");
+    valid("01232\0");
+    valid("012321\0");
+    valid("0123210\0");
+    valid("01232101\0");
 
+    declare("01\0");
+    valid("0\0");
+    valid("01\0");
+    valid("012\0");
+    valid("0123210\0");
+    valid("01232101\0");
 
+    remove_quantum("012321\0");
+    valid("0\0");
+    valid("01\0");
+    valid("012\0");
+    valid("0123\0");
+    valid("01232\0");
+    valid("012321\0");
+    valid("0123210\0");
+    valid("01232101\0");
 
-//    clear_tree(&tree_root);
-
+    remove_quantum("01232101232\0");
+    valid("0\0");
+    valid("01232\0");
+    valid("012321\0");
 
 //    free(buf1);
 //    free(buf2);

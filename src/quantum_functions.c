@@ -57,8 +57,9 @@ void declare_helper(char *history, node *node)
     }
 }
 
-void new_declare(char *history)
+void declare(char *history)
 {
+    // calls helper to avoid printing too many times
     if (check_input_history(history))
     {
         declare_helper(history, tree_root);
@@ -67,26 +68,12 @@ void new_declare(char *history)
     {
         error_to_stderr();
     }
-}
-
-void declare(char *history, node *root_node)
-{
-    // calls helper to avoid printing too many times
-    if (check_input_history(history))
-    {
-        declare_helper(history, root_node);
-        fputs(OK_STRING, stdout);
-    } else
-    {
-        error_to_stderr();
-    }
 
 }
 
-bool is_valid(char *history, node *root_node)
+bool is_valid(char *history)
 {
-//    node **tmp = get_node_under_history(history, root_node);
-    node **tmp = get_node_under_history(history, tree_root);
+    node **tmp = get_node_under_history(history);
     if (tmp == NULL)
         return false;
         // TODO maybe would be better to not care about tree root and just return ->valid ?
@@ -99,31 +86,11 @@ bool is_valid(char *history, node *root_node)
     }
 }
 
-void new_valid(char *history)
+void valid(char *history)
 {
     if (check_input_history(history))
     {
-        if (is_valid(history, tree_root))
-        {
-            fputs(YES_STRING, stdout);
-        } else
-        {
-            fputs(NO_STRING, stdout);
-        }
-    } else
-    {
-        //TODO errors put out outside the function
-        error_to_stderr();
-    }
-
-}
-
-void valid(char *history, node *root_node)
-{
-    dbg_print_node(tree_root);
-    if (check_input_history(history))
-    {
-        if (is_valid(history, tree_root))
+        if (is_valid(history))
         {
             fputs(YES_STRING, stdout);
         } else
@@ -162,9 +129,9 @@ int energy_two_param_helper(char *history, uint64_t energy, node *node)
         return 1;
 }
 
-void energy_two_param(char *history, uint64_t energy, node *root_node)
+void energy_two_param(char *history, uint64_t energy)
 {
-    int tmp = energy_two_param_helper(history, energy, root_node);
+    int tmp = energy_two_param_helper(history, energy, tree_root);
     if (tmp == 0)
     {
         printf(OK_STRING);
@@ -174,10 +141,10 @@ void energy_two_param(char *history, uint64_t energy, node *root_node)
     }
 }
 
-void energy_one_param(char *history, node *root_node)
+void energy_one_param(char *history)
 {
 
-    node **tmp = get_node_under_history(history, root_node);
+    node **tmp = get_node_under_history(history);
     if (tmp != NULL && (*tmp)->valid == 1)
     {
         printf("%" PRId64 "\n", (*tmp)->energy);
@@ -213,11 +180,11 @@ int remove_quantum_helper(char *history, node *node_t)
     } else return 1;
 }
 
-void remove_quantum(char *history, node *root_node)
+void remove_quantum(char *history)
 {
     if (check_input_history(history))
     {
-        int result = remove_quantum_helper(history, root_node);
+        int result = remove_quantum_helper(history, tree_root);
         if (result == 0)
         {
             printf(OK_STRING);
@@ -229,9 +196,9 @@ void remove_quantum(char *history, node *root_node)
     }
 }
 
-node **get_node_under_history(char *history, node *root_node)
+node **get_node_under_history(char *history)
 {
-    node **result = &root_node;
+    node **result = &tree_root;
     int index = -1;
 
     for (; *history != '\0'; history++)
@@ -253,10 +220,10 @@ node **get_node_under_history(char *history, node *root_node)
     return result;
 }
 
-void equal(char *history_a, char *history_b, node *root_node)
+void equal(char *history_a, char *history_b)
 {
-    node **node_a = get_node_under_history(history_a, root_node);
-    node **node_b = get_node_under_history(history_b, root_node);
+    node **node_a = get_node_under_history(history_a);
+    node **node_b = get_node_under_history(history_b);
 
     if (node_a != NULL && node_b != NULL)
     {
