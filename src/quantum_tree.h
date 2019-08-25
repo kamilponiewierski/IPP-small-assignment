@@ -7,12 +7,8 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>
+#include "defines.h"
 
-#define CHILDREN_COUNT 4
-#define MAXIMUM_VALID_ENERGY_DIGITS 20
-
-//Text constants
-#define NULL_NODE_ERROR "Node is null, error\n"
 
 /// Tree node structure which contains energy value, validity of history, and pointers which are used to loop abs class
 /// @param energy positive value between 1 and 2^64 - 1
@@ -22,7 +18,7 @@ typedef struct node
 {
     uint64_t energy;
     short valid;
-//    struct node *prev;
+    struct node *prev;
     struct node *next;
     struct node *children[CHILDREN_COUNT];
 } node;
@@ -31,7 +27,7 @@ typedef struct node
 node *create_root();
 
 /// Initializes a node with default values
-static void init_node(node *n);
+void init_node(node *n);
 
 /// Create a new node with default values, returns null if malloc failed
 node *get_node();

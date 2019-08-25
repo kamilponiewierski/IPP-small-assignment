@@ -99,50 +99,105 @@ void EQUAL(node *a, node *b)
     }
 } */
 
+//static node *tree_root = NULL;
 
 
 int main()
 {
-    node *tree_root = create_root();
-    if (tree_root == NULL)
-    {
-        return EXIT_FAILURE;
-    }
-
-    char *buf1 = strdup("0012\0");
-    char *buf2 = strdup("012311\0");
-    char *buf3 = strdup("1231210\0");
-
-    char *test_null_string = strdup("\0");
-    char *test_percentage = strdup("\\ %d\0");
-
-    assert(check_input_history("01123211232\0") == true);
-    assert(check_input_history("%d121aadds\0") == false);
-    assert(check_input_history("unsigned long\0") == false);
-    assert(check_input_history("0\0") == true);
-
-    declare(test_null_string, tree_root);
-    declare(test_percentage, tree_root);
+    quantum_initialize();
 
 
-    declare(buf1, tree_root);
-    valid(buf1, tree_root);
-    energy_two_param("0012\0", 12312343, tree_root);
-    energy_one_param(buf1, tree_root);
+//    node *tree_root = create_root();
+//    tree_root = (node *) malloc(sizeof(node));
+//    init_node(tree_root);
+//    if (tree_root == NULL)
+//    {
+//        return EXIT_FAILURE;
+//    }
+//    dbg_print_node(tree_root);
 
-    node **ptr = get_node_under_history("0012\0", tree_root);
+//    char *buf1 = strdup("0012\0");
+//    char *buf2 = strdup("012311\0");
+//    char *buf3 = strdup("1231210\0");
+//
+//    char *test_null_string = strdup("\0");
+//    char *test_percentage = strdup("\\ %d\0");
+//
+//    assert(check_input_history("01123211232\0") == true);
+//    assert(check_input_history("%d121aadds\0") == false);
+//    assert(check_input_history("unsigned long\0") == false);
+//    assert(check_input_history("0\0") == true);
+//
+//    declare(test_null_string, tree_root);
+//    declare(test_percentage, tree_root);
+//
+//
+//    declare(buf1, tree_root);
+//    valid(buf1, tree_root);
+//    energy_two_param("0012\0", 12312343, tree_root);
+//    energy_one_param(buf1, tree_root);
 
-    if (ptr != NULL)
-        dbg_print_node(*ptr);
+//    node **ptr = get_node_under_history("0012\0", tree_root);
 
-    clear_tree(&tree_root);
+//    if (ptr != NULL)
+//        dbg_print_node(*ptr);
 
-    free(buf1);
-    free(buf2);
-    free(buf3);
 
-    free(test_null_string);
-    free(test_percentage);
+    new_declare("0123\0");
+    new_valid("0\0");
+    new_valid("01\0");
+
+
+//    declare("0123\0", tree_root);
+//    valid("0\0", tree_root);
+//    valid("01\0", tree_root);
+//    valid("012\0", tree_root);
+//    valid("0123\0", tree_root);
+//    valid("1\0", tree_root);
+//    valid("01232\0", tree_root);
+//
+//    declare("0123210\0", tree_root);
+//    valid("0123\0", tree_root);
+//    valid("01232\0", tree_root);
+//    valid("012321\0", tree_root);
+//    valid("0123210\0", tree_root);
+//    valid("01232101\0", tree_root);
+//
+//    declare("01\0", tree_root);
+//    valid("0\0", tree_root);
+//    valid("01\0", tree_root);
+//    valid("012\0", tree_root);
+//    valid("0123210\0", tree_root);
+//    valid("01232101\0", tree_root);
+//
+//    remove_quantum("012321\0", tree_root);
+//    valid("0\0", tree_root);
+//    valid("01\0", tree_root);
+//    valid("012\0", tree_root);
+//    valid("0123\0", tree_root);
+//    valid("01232\0", tree_root);
+//    valid("012321\0", tree_root);
+//    valid("0123210\0", tree_root);
+//    valid("01232101\0", tree_root);
+//
+//    remove_quantum("01232101232\0", tree_root);
+//    valid("0\0", tree_root);
+//    valid("01232\0", tree_root);
+//    valid("012321\0", tree_root);
+
+
+
+//    clear_tree(&tree_root);
+
+
+//    free(buf1);
+//    free(buf2);
+//    free(buf3);
+//
+//    free(test_null_string);
+//    free(test_percentage);
+
+    quantum_remove();
 
     return 0;
 }
