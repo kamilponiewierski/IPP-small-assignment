@@ -181,6 +181,28 @@ int main()
     valid("01232\0");
     valid("012321\0");
 
+    declare("111\0");
+    energy_two_param("111\0", 10);
+    declare("222\0");
+    energy_two_param("222\0", 5);
+    declare("333\0");
+    energy_two_param("333\0", 60);
+    declare("333123\0");
+    energy_two_param("333123\0", 52);
+
+    equal("111\0", "222\0");
+    equal("111\0", "333\0");
+    equal("111\0", "333123\0");
+
+    energy_two_param("333123\0", 999);
+
+    remove_quantum("333123\0");
+
+    dbg_print_node(get_node_under_history("111\0"));
+    dbg_print_node(get_node_under_history("222\0"));
+    dbg_print_node(get_node_under_history("333\0"));
+    dbg_print_node(get_node_under_history("333123\0"));
+
 //    free(buf1);
 //    free(buf2);
 //    free(buf3);
@@ -188,7 +210,7 @@ int main()
 //    free(test_null_string);
 //    free(test_percentage);
 
-    quantum_remove();
+    quantum_cleanup();
 
     return 0;
 }
