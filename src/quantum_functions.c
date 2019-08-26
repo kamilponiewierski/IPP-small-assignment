@@ -13,8 +13,7 @@ void quantum_initialize()
 
 int quantum_cleanup()
 {
-    delete_children(tree_root);
-    free(tree_root);
+    clear_tree(&tree_root);
     return 0;
 }
 
@@ -27,11 +26,6 @@ int char_digit_to_int(char c)
 void assert_inside_history(char c)
 {
     assert(HISTORY_START_CHAR <= c && c <= HISTORY_END_CHAR);
-}
-
-void error_to_stderr()
-{
-    fputs(ERROR_STRING, stderr);
 }
 
 bool check_input_history(char *string)
@@ -69,7 +63,7 @@ void declare(char *history)
     }
     else
     {
-        error_to_stderr();
+        serr(ERROR_STRING);
     }
 
 }
@@ -105,7 +99,7 @@ void valid(char *history)
     }
     else
     {
-        error_to_stderr();
+        serr(ERROR_STRING);
     }
 
 }
@@ -113,7 +107,10 @@ void valid(char *history)
 
 int energy_two_param_helper(char *history, uint64_t energy)
 {
-    node *tmp = *get_node_under_history(history);
+    node **ptr = get_node_under_history(history);
+    node *tmp = NULL;
+    if (ptr != NULL)
+        tmp = *ptr;
 
     if (tmp != NULL)
     {
@@ -140,32 +137,37 @@ void energy_two_param(char *history, uint64_t energy)
     }
     else
     {
-        error_to_stderr();
+        serr(ERROR_STRING);
     }
 }
 
 void energy_one_param(char *history)
 {
     node **tmp = get_node_under_history(history);
-    if (tmp != NULL && (*tmp)->valid == 1)
+    if (tmp != NULL && (*tmp)->valid == 1 && (*tmp)->energy > 0)
     {
         printf("%" PRId64 "\n", (*tmp)->energy);
     }
     else
     {
-        error_to_stderr();
+        serr(ERROR_STRING);
     }
 }
 
 // returns 0 if successful, 1 otherwise
 int remove_quantum_helper(char *history, node *node_t)
 {
+    // returns failure only if history was "\0" at the start, otherwise it will reach another return statement
+    if (*history == '\0')
+        return 1;
+
     if (node_t != NULL && *history != '\0')
     {
         int index = char_digit_to_int(*history);
 
         // pointer to that node is needed to delete it, so we stop when we find null one char ahead
         // it's done before recursive call
+
         if (*(history + 1) == '\0')
         {
             index = char_digit_to_int(*(history));
@@ -178,7 +180,7 @@ int remove_quantum_helper(char *history, node *node_t)
             return remove_quantum_helper((history + 1), node_t->children[index]);
         }
         else
-            return 1;
+            return 0;
     }
     else return 1;
 }
@@ -193,11 +195,11 @@ void remove_quantum(char *history)
             printf(OK_STRING);
         }
         else
-            error_to_stderr();
+            serr(ERROR_STRING);
     }
     else
     {
-        error_to_stderr();
+        serr(ERROR_STRING);
     }
 }
 
@@ -252,20 +254,26 @@ void equal(char *history_a, char *history_b)
             // new energy is equal to arithmetic mean of energy of both nodes
             uint64_t energy = ((*node_a)->energy + (*node_b)->energy) / 2;
             set_energy_to_abs_class(*node_a, energy);
+            fputs(OK_STRING, stdout);
+            return;
         }
         else if ((*node_a)->valid == 1 && (*node_a)->energy > 0 && (*node_b)->valid == 1)
         {
             join_abs_class(node_a, node_b);
             set_energy_to_abs_class(*node_a, (*node_a)->energy);
+            fputs(OK_STRING, stdout);
+            return;
         }
         else if ((*node_b)->valid == 1 && (*node_b)->energy > 0 && (*node_a)->valid == 1)
         {
             join_abs_class(node_a, node_b);
             set_energy_to_abs_class(*node_b, (*node_b)->energy);
+            fputs(OK_STRING, stdout);
+            return;
         }
-        fputs(OK_STRING, stdout);
+        serr(ERROR_STRING);
     }
     else
-        error_to_stderr();
+        serr(ERROR_STRING);
 }
 
