@@ -243,13 +243,26 @@ void equal(char *history_a, char *history_b)
 
     if (node_a != NULL && node_b != NULL)
     {
-        if ((*node_a)->valid == 1 && (*node_b)->valid == 1)
+        // both histories are valid and have assigned energy
+        if ((*node_a)->valid == 1 && (*node_b)->valid == 1 && (*node_a)->energy > 0 && (*node_b)->energy > 0)
         {
             join_abs_class(node_a, node_b);
 
+            // new energy is equal to arithmetic mean of energy of both nodes
             uint64_t energy = ((*node_a)->energy + (*node_b)->energy) / 2;
             set_energy_to_abs_class(*node_a, energy);
         }
+        else if ((*node_a)->valid == 1 && (*node_a)->energy > 0 && (*node_b)->valid == 1)
+        {
+            join_abs_class(node_a, node_b);
+            set_energy_to_abs_class(*node_a, (*node_a)->energy);
+        }
+        else if ((*node_b)->valid == 1 && (*node_b)->energy > 0 && (*node_a)->valid == 1)
+        {
+            join_abs_class(node_a, node_b);
+            set_energy_to_abs_class(*node_b, (*node_b)->energy);
+        }
+        fputs(OK_STRING, stdout);
     }
     else
         error_to_stderr();

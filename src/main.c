@@ -43,17 +43,23 @@ int main()
     valid("012321\0");
 
     declare("111\0");
-    energy_two_param("111\0", 10);
     declare("222\0");
-    energy_two_param("222\0", 5);
     declare("333\0");
-    energy_two_param("333\0", 60);
     declare("333123\0");
+
+    energy_two_param("111\0", 3);
+    energy_two_param("333\0", 63);
     energy_two_param("333123\0", 52);
 
     equal("111\0", "222\0");
+    energy_one_param("111\0");
+    energy_one_param("222\0");
     equal("111\0", "333\0");
+    energy_one_param("111\0");
+    energy_one_param("333123\0");
     equal("111\0", "333123\0");
+    energy_one_param("333123\0");
+    energy_one_param("222\0");
 
     energy_two_param("333123\0", 999);
 
