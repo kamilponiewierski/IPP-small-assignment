@@ -106,44 +106,6 @@ int main()
 {
     quantum_initialize();
 
-
-//    node *tree_root = create_root();
-//    tree_root = (node *) malloc(sizeof(node));
-//    init_node(tree_root);
-//    if (tree_root == NULL)
-//    {
-//        return EXIT_FAILURE;
-//    }
-//    dbg_print_node(tree_root);
-
-//    char *buf1 = strdup("0012\0");
-//    char *buf2 = strdup("012311\0");
-//    char *buf3 = strdup("1231210\0");
-//
-//    char *test_null_string = strdup("\0");
-//    char *test_percentage = strdup("\\ %d\0");
-//
-//    assert(check_input_history("01123211232\0") == true);
-//    assert(check_input_history("%d121aadds\0") == false);
-//    assert(check_input_history("unsigned long\0") == false);
-//    assert(check_input_history("0\0") == true);
-//
-//    declare(test_null_string);
-//    declare(test_percentage);
-//
-//
-//    declare(buf1, tree_root);
-//    valid(buf1, tree_root);
-//    energy_two_param("0012\0", 12312343, tree_root);
-//    energy_one_param(buf1, tree_root);
-
-//    node **ptr = get_node_under_history("0012\0", tree_root);
-
-//    if (ptr != NULL)
-//        dbg_print_node(*ptr);
-
-
-
     declare("0123\0");
     valid("0\0");
     valid("01\0");
@@ -198,19 +160,7 @@ int main()
 
     remove_quantum("333123\0");
 
-    dbg_print_node(get_node_under_history("111\0"));
-    dbg_print_node(get_node_under_history("222\0"));
-    dbg_print_node(get_node_under_history("333\0"));
-    dbg_print_node(get_node_under_history("333123\0"));
-
-//    free(buf1);
-//    free(buf2);
-//    free(buf3);
-//
-//    free(test_null_string);
-//    free(test_percentage);
 
     quantum_cleanup();
-
     return 0;
 }

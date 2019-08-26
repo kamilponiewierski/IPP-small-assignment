@@ -5,8 +5,10 @@ static node *tree_root = NULL;
 void quantum_initialize()
 {
     assert(tree_root == NULL);
-
     tree_root = create_root();
+
+    if (tree_root == NULL)
+        exit(1);
 }
 
 int quantum_cleanup()
@@ -161,14 +163,12 @@ int remove_quantum_helper(char *history, node *node_t)
     {
         int index = char_digit_to_int(*history);
 
-        // pointer to that node is needed to delete it, so we stop when we found it two chars ahead
+        // pointer to that node is needed to delete it, so we stop when we find null one char ahead
         // it's done before recursive call
         if (*(history + 1) == '\0')
         {
             index = char_digit_to_int(*(history));
-            delete_children(node_t->children[index]);
-            free(node_t->children[index]);
-            node_t->children[index] = NULL;
+            delete_given_child(node_t, index);
             return 0;
         }
 
@@ -235,9 +235,6 @@ void join_abs_class(node **node_a, node **node_b)
         (*node_b)->next = (*node_a);
     }
 }
-
-
-
 
 void equal(char *history_a, char *history_b)
 {

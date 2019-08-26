@@ -28,7 +28,8 @@ node *get_node()
     {
         // Allocation of memory failed
         perror("malloc");
-        return NULL;
+        // TODO tree_cleanup here
+        exit(1);
     }
     init_node(ptr);
     return ptr;
@@ -76,16 +77,28 @@ bool can_be_deleted(node *n)
     }
 }
 
+void remove_node_from_abs_class(node **node_t)
+{
+    if (*(node_t) != NULL)
+    {
+        (*node_t)->next->prev = (*node_t)->prev;
+        (*node_t)->prev->next = (*node_t)->next;
+
+        (*node_t)->next = *node_t;
+        (*node_t)->prev = *node_t;
+    }
+}
+
 void delete_given_child(node *n, int child_index)
 {
     if (child_index < CHILDREN_COUNT && n->children[child_index] != NULL)
     {
+        remove_node_from_abs_class(&(n->children[child_index]));
         delete_children(n->children[child_index]);
+
         n->valid = 0;
         n->energy = 0;
-        node *tmp = n->prev;
-        n->prev = n->next;
-        n->next->prev = tmp;
+
         free(n->children[child_index]);
         n->children[child_index] = NULL;
     }
