@@ -57,8 +57,8 @@ void delete_given_child(node *n, int child_index);
 /// Clears whole tree and frees memory
 void clear_tree(node **tree_root);
 
-/// Prints all the values in the node @param ptr, along with empty children
-void dbg_print_node(node *ptr);
+/// Prints all the values in the node ptr, along with null children
+void dbg_print_node(node **ptr);
 
 /// Prints address of @param ptr
 void dbg_print_node_address(node *ptr);
