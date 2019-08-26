@@ -60,9 +60,6 @@ void delete_given_child(node *n, int child_index)
         remove_node_from_abs_class(&(n->children[child_index]));
         delete_children(n->children[child_index]);
 
-        n->valid = 0;
-        n->energy = 0;
-
         free(n->children[child_index]);
         n->children[child_index] = NULL;
     }
