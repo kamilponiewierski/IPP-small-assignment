@@ -6,11 +6,10 @@ void quantum_initialize()
 {
     assert(tree_root == NULL);
 
-    tree_root = get_node();
-    tree_root->valid = -1;
+    tree_root = create_root();
 }
 
-int quantum_remove()
+int quantum_cleanup()
 {
     delete_children(tree_root);
     free(tree_root);
@@ -64,7 +63,8 @@ void declare(char *history)
     {
         declare_helper(history, tree_root);
         fputs(OK_STRING, stdout);
-    } else
+    }
+    else
     {
         error_to_stderr();
     }
@@ -76,11 +76,12 @@ bool is_valid(char *history)
     node **tmp = get_node_under_history(history);
     if (tmp == NULL)
         return false;
-        // TODO maybe would be better to not care about tree root and just return ->valid ?
+        // checking eq 1 assures we won't have valid return true on tree_root
     else if ((*tmp)->valid == 1)
     {
         return true;
-    } else
+    }
+    else
     {
         return false;
     }
@@ -93,49 +94,48 @@ void valid(char *history)
         if (is_valid(history))
         {
             fputs(YES_STRING, stdout);
-        } else
+        }
+        else
         {
             fputs(NO_STRING, stdout);
         }
-    } else
+    }
+    else
     {
-        //TODO errors put out outside the function
         error_to_stderr();
     }
 
 }
 
 
-int energy_two_param_helper(char *history, uint64_t energy, node *node)
+int energy_two_param_helper(char *history, uint64_t energy)
 {
-    if (node != NULL)
+    node *tmp = *get_node_under_history(history);
+
+    if (tmp != NULL)
     {
-        if (*history == '\0')
+        if (tmp->valid == 1)
         {
-            if (node->valid == 1)
-            {
-                node->energy = energy;
-                return 0;
-            } else
-            {
-                return 1;
-            }
-        } else
-        {
-            assert_inside_history(*history);
-            return energy_two_param_helper(history + 1, energy, node->children[*history - '0']);
+            if (energy != tmp->energy)
+                set_energy_to_abs_class(tmp, energy);
+
+            return 0;
         }
-    } else
+        else
+            return 1;
+    }
+    else
         return 1;
 }
 
 void energy_two_param(char *history, uint64_t energy)
 {
-    int tmp = energy_two_param_helper(history, energy, tree_root);
+    int tmp = energy_two_param_helper(history, energy);
     if (tmp == 0)
     {
         printf(OK_STRING);
-    } else
+    }
+    else
     {
         error_to_stderr();
     }
@@ -143,12 +143,12 @@ void energy_two_param(char *history, uint64_t energy)
 
 void energy_one_param(char *history)
 {
-
     node **tmp = get_node_under_history(history);
     if (tmp != NULL && (*tmp)->valid == 1)
     {
         printf("%" PRId64 "\n", (*tmp)->energy);
-    } else
+    }
+    else
     {
         error_to_stderr();
     }
@@ -175,9 +175,11 @@ int remove_quantum_helper(char *history, node *node_t)
         if (node_t->children[index] != NULL)
         {
             return remove_quantum_helper((history + 1), node_t->children[index]);
-        } else
+        }
+        else
             return 1;
-    } else return 1;
+    }
+    else return 1;
 }
 
 void remove_quantum(char *history)
@@ -188,9 +190,11 @@ void remove_quantum(char *history)
         if (result == 0)
         {
             printf(OK_STRING);
-        } else
+        }
+        else
             error_to_stderr();
-    } else
+    }
+    else
     {
         error_to_stderr();
     }
@@ -199,7 +203,7 @@ void remove_quantum(char *history)
 node **get_node_under_history(char *history)
 {
     node **result = &tree_root;
-    int index = -1;
+    int index;
 
     for (; *history != '\0'; history++)
     {
@@ -220,6 +224,21 @@ node **get_node_under_history(char *history)
     return result;
 }
 
+void join_abs_class(node **node_a, node **node_b)
+{
+    if (node_a != NULL && node_b != NULL)
+    {
+        (*node_a)->prev->next = (*node_b)->next;
+        (*node_b)->next->prev = (*node_a)->prev;
+
+        (*node_a)->prev = (*node_b);
+        (*node_b)->next = (*node_a);
+    }
+}
+
+
+
+
 void equal(char *history_a, char *history_b)
 {
     node **node_a = get_node_under_history(history_a);
@@ -229,9 +248,13 @@ void equal(char *history_a, char *history_b)
     {
         if ((*node_a)->valid == 1 && (*node_b)->valid == 1)
         {
-            //TODO
+            join_abs_class(node_a, node_b);
+
+            uint64_t energy = ((*node_a)->energy + (*node_b)->energy) / 2;
+            set_energy_to_abs_class(*node_a, energy);
         }
-    } else
+    }
+    else
         error_to_stderr();
 }
 

@@ -8,7 +8,7 @@
 
 void quantum_initialize();
 
-int quantum_remove();
+int quantum_cleanup();
 
 /// Helper function which checks if the string is a correct entry for other functions
 bool check_input_history(char *string);
