@@ -105,6 +105,10 @@ void process_line(char *buffer)
         else
             error_flag = 1;
     }
+    else
+    {
+        error_flag = 1;
+    }
 
     if (error_flag)
         serr(ERROR_STRING);
@@ -144,10 +148,10 @@ int main()
 
     initialize(&buffer, &buffer_size);
 
-//    while (read_line(&buffer, &buffer_size))
-//    {
-//        printf("%s", buffer);
-//    }
+    while (read_line(&buffer, &buffer_size))
+    {
+        process_line(buffer);
+    }
 
     declare("0123\0");
     valid("0\0");
