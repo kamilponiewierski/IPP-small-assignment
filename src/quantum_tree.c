@@ -41,42 +41,6 @@ void add_child(node *n, int child_index)
         n->children[child_index] = get_node();
 }
 
-bool has_children(node *n)
-{
-    if (n == NULL)
-    {
-        return false;
-    }
-
-    int count_null_nodes = 0;
-    for (int i = 0; i < CHILDREN_COUNT; i++)
-    {
-        if (n->children[i] == NULL)
-            count_null_nodes++;
-    }
-
-    if (count_null_nodes == CHILDREN_COUNT)
-        return false;
-    else
-        return true;
-}
-
-bool can_be_deleted(node *n)
-{
-    if (n == NULL)
-        return true;
-
-    bool subnodes_exist = has_children(n);
-
-    if (n->energy == 0 && n->prev == n && n->next == n && n->valid == 0 && subnodes_exist == false)
-    {
-        return true;
-    } else
-    {
-        return false;
-    }
-}
-
 void remove_node_from_abs_class(node **node_t)
 {
     if (*(node_t) != NULL)

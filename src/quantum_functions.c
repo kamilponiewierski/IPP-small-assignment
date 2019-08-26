@@ -44,6 +44,7 @@ bool check_input_history(char *string)
         if (*(string + i) < HISTORY_START_CHAR || HISTORY_END_CHAR < *(string + i))
             return false;
     }
+    return false;
 }
 
 void declare_helper(char *history, node *node)

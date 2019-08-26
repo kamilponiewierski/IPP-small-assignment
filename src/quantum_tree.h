@@ -38,12 +38,6 @@ node *get_node();
 /// @param child_index index of table under which a new node is created
 void add_child(node *n, int child_index);
 
-/// Checks if node has children
-bool has_children(node *n);
-
-/// Checks if node can be deleted safely
-static bool can_be_deleted(node *n);
-
 /// Deletes all children of node recursively going down
 /// @param n node where deletion will happen
 void delete_children(node *n);
