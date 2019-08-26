@@ -81,6 +81,11 @@ void delete_given_child(node *n, int child_index)
     if (child_index < CHILDREN_COUNT && n->children[child_index] != NULL)
     {
         delete_children(n->children[child_index]);
+        n->valid = 0;
+        n->energy = 0;
+        node *tmp = n->prev;
+        n->prev = n->next;
+        n->next->prev = tmp;
         free(n->children[child_index]);
         n->children[child_index] = NULL;
     }
@@ -101,7 +106,7 @@ void clear_tree(node **tree_root)
     *tree_root = NULL;
 }
 
-void dbg_print_node(node *n)
+void dbg_print_node(node **n)
 {
     if (n == NULL)
     {
@@ -109,16 +114,28 @@ void dbg_print_node(node *n)
         return;
     }
 
-    printf("Energy = %" PRId64 "\n", n->energy);
+    printf("Energy = %" PRId64 "\n", (*n)->energy);
     fputs("Valid = ", stdout);
-    fputs(n->valid ? "true\n" : "false\n", stdout);
+    fputs((*n)->valid ? "true\n" : "false\n", stdout);
     printf("Nulls: ");
     for (int i = 0; i < CHILDREN_COUNT; i++)
     {
-        if (n->children[i] == NULL)
+        if ((*n)->children[i] == NULL)
         {
             printf("%d, ", i);
         }
     }
     printf("\n");
+}
+
+void set_energy_to_abs_class(node *abs_class, uint64_t energy)
+{
+    node *next_node = abs_class;
+    node *ptr_to_abs_class = abs_class->prev->next;
+
+    do
+    {
+        next_node->energy = energy;
+        next_node = next_node->next;
+    } while (next_node != ptr_to_abs_class);
 }
