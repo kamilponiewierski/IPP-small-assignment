@@ -36,7 +36,7 @@ void error_to_stderr()
 
 bool check_input_history(char *string)
 {
-    for (unsigned long i = 0; i < strlen(string); i++)
+    for (unsigned long i = 0; i <= strlen(string); i++)
     {
         if (*(string + i) == '\0')
             return true;

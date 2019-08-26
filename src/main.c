@@ -5,6 +5,8 @@ int main()
 {
     quantum_initialize();
 
+    node **tmp = get_node_under_history("\0");
+
     declare("0123\0");
     valid("0\0");
     valid("01\0");
